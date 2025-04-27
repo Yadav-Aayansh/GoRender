@@ -2,20 +2,23 @@ package main
 
 import (
 	"fmt"
-	"net/http"
 	"os"
+
+	"github.com/gin-gonic/gin"
 )
 
 func main() {
 	port := os.Getenv("PORT")
 	if port == "" {
-		port = "3000" // default if PORT not set
+		port = "3000"
 	}
 
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, "Hello, Render!")
+	r := gin.Default()
+
+	r.GET("/", func(c *gin.Context) {
+		c.String(200, "Hello, Render!")
 	})
 
 	fmt.Println("Server running on port", port)
-	http.ListenAndServe("0.0.0.0:"+port, nil)
+	r.Run("0.0.0.0:" + port)
 }
